@@ -1,0 +1,103 @@
+{% extends 'admin/base.html' %}
+{% load i18n static %}
+
+{% block extrastyle %}
+    <link rel="stylesheet" href="{% static 'css/admin/admin.css' %}">
+            <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dashboard - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+{#        <link href="css/styles.css" rel="stylesheet" />#}
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static 'css/admin/admin.css' %}">
+        <link rel="stylesheet" href="{% static 'css/admin/template.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+{% endblock %}
+
+{% block branding %}
+    <img class="logo" class="logo" height="70px" width="60px" src="{% static 'viya1/images/Logo.png' %}"/>
+    <h1 id="site-name" style="display:none;"><a href="{%  url 'admin:index' %}">Viya Database</a></h1>
+{% endblock %}
+
+
+{% block usertools %}
+        {% if has_permission %}
+        <div id="user-tools">
+
+{#            {% block welcome-msg %}#}
+{#                {% translate 'Welcome,' %}#}
+{#                <strong>{% firstof user.get_short_name user.get_username %}</strong>.#}
+{#            {% endblock %}#}
+
+{#            {% block userlinks %}#}
+{##}
+{#                {% if site_url %}#}
+{#                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /#}
+{#                {% endif %}#}
+
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+
+                    {% if user.is_active and user.is_staff %}
+                        {% url 'django-admindocs-docroot' as docsroot %}
+                        {% if docsroot %}
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="{{ docsroot }}">{% translate 'Documentation' %}</a></li>
+                         {% endif %}
+                    {% endif %}
+
+                      {% if user.has_usable_password %}
+                      <li><a class="dropdown-item" href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a></li>
+                      {% endif %}
+
+                      <li><hr class="dropdown-divider" /></li>
+                      <li><a class="dropdown-item" href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a></li>
+
+                    </ul>
+                </li>
+
+                <script src= "{% static 'js/script.js' %}"></script>
+                <script src= "{% static 'js/datatables-simple-demo.js' %}"></script>
+                <script src= "{% static 'assets/chart-area-demo.js' %}"></script>
+                <script src= "{% static 'assets/demo/chart-bar-demo.js' %}"></script>
+            </ul>
+
+
+
+
+{#            {% endblock %}#}
+
+        </div>
+  {% endif %}
+{% endblock %}
+
+{% block nav-sidebar %}
+{#          {% include "admin/nav_sidebar.html" %}#}
+{#            <a href= "scrap_data">Get data from website</a>#}
+{% endblock %}
+
+
+
+{% block content %}
+<div id="content-main">
+{#  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}#}
+</div>
+{% endblock %}
+
+{% block content_title %}{% if title %}
+    <h1 style='display:none;'>{{ title }}</h1>{% endif %}
+
+{% endblock %}
+
+
+
+
+
+

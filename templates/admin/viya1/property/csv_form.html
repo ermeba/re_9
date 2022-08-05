@@ -1,0 +1,40 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <div>
+
+{#            {{ form.as_p }}#}
+{#            {% csrf_token %}#}
+
+{#                <button type="submit">Upload CSV</button>#}
+{##}
+{##}
+{#                {{ form.as_p }}#}
+
+
+
+
+
+    <form action="get_link" method="post">
+        {% csrf_token %}
+    <label for="your_link">Copy your link: </label>
+    <input id="your_link" type="text" name="your_name" value="{{ current_name }}">
+    <input type="submit" value="OK">
+        <a href="get_link/"> ok <form>
+     </form>
+
+
+        <script>
+        function getInputValue(){
+            // Selecting the input element and get its value
+            var inputVal = document.getElementById("your_link").value;
+
+            // Displaying the value
+            alert(inputVal);
+        }
+    </script>
+
+    </div>
+    <br />
+  {{ block.super }}
+{% endblock %}

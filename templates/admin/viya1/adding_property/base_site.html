@@ -1,0 +1,24 @@
+
+
+{% extends 'admin/base.html' %}
+
+{% load i18n static %}
+
+{% block branding %}
+    <img class="logo" class="logo" height="100px" src="{% static 'viya1/images/Logo.png' %}"/>
+    <h1 id="site-name"><a href="{%  url 'admin:index' %}">Viya Database</a></h1>
+
+
+{% endblock %}
+
+
+    {% block nav-sidebar %}
+{#          {% include "admin/nav_sidebar.html" %}#}
+{#            <a href= "scrap_data">Get data from website</a>#}
+
+    {% endblock %}
+
+
+
+
+

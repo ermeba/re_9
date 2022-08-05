@@ -1,0 +1,26 @@
+{#{% extends 'admin/change_list.html' %}#}
+{#{% load i18n static %}#}
+{##}
+{#{% block object-tools-items %}#}
+{#    {{ block.super }}#}
+{#    <li>#}
+{#        <a href="{% url 'admin:index' %}" class="btn btn-high btn-success">Get data from website</a>#}
+{#    </li>#}
+{#{% endblock %}#}
+{##}
+
+
+
+{% extends 'admin/change_list.html' %}
+{% load i18n static %}
+{#{% block object-tools %}#}
+{% block object-tools-items %}
+
+    <a href= "scrap_data">Get data from website</a>
+    <br />
+
+
+
+    {{ block.super }}
+
+{% endblock %}
