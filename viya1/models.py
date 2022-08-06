@@ -219,9 +219,56 @@ class Project(models.Model):
 #     name_of_feature_Turkish = models.CharField(max_length=300, default='feature name')
 
 
-
-
 # Tables for Clients
+class Client(models.Model):
+    name = models.CharField(max_length=300, default='name')
+    surname = models.CharField(max_length=300, default='surname')
+    birthday = models.DateTimeField(default=timezone.now)
+    photo = models.ImageField(upload_to='client/', blank=True, null=True)
+
+    def image_preview(self):
+        if self.photo:
+            return mark_safe('<img src="{0}" width="80" height="60" />'.format(self.photo.url))
+        else:
+            return '(No image)'
+
+
+class ClientContact(models.Model):
+    phone_nr = models.CharField(max_length=300, default='phone number')
+    address = models.CharField(max_length=300, default='surname')
+    foreign_key = models.ForeignKey(Client, on_delete=models.CASCADE, default='No company', related_name='personID')
+
+
+class FamilyMember(models.Model):
+    member_id = models.IntegerField()
+    name = models.CharField(max_length=300, default='name')
+    surname = models.CharField(max_length=300, default='surname')
+    person_family = models.ForeignKey(Client, on_delete=models.CASCADE, default='no person key', related_name='')
+
+
+class Relationships(models.Model):
+    relationship = models.CharField(max_length=300, blank=False, null=False)
+    foreign_key = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, default='No company', related_name='memberId')
+
+
+class References(models.Model):
+    reference_id = models.CharField(max_length=500)
+    reference_name = models.CharField(max_length=500, default='no reference')
+    foreign_key = models.ForeignKey(Client, on_delete=models.CASCADE, default='no client', related_name='personID' )
+
+
+class FamilyDocuments(models.Model):
+    name_of_document = models.CharField(max_length=300)
+    foreign_key = models.ForeignKey(FamilyMember, on_delete=models.CASCADE, related_name='memberID')
+
+
+class ClientDocuments(models.Model):
+    name_of_document = models.CharField(max_length=300)
+    foreign_key = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='memberID')
+
+
+
+
 
 
 
