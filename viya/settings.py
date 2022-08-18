@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# export DJANGO_SETTINGS_MODULE=viya1.settings
+
 
 # Application definition
 
@@ -38,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'viya1',
-    'viya2',
     'rest_framework',
     'admindrop',
     'django_admin_listfilter_dropdown',
@@ -92,7 +93,7 @@ WSGI_APPLICATION = 'viya.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'viya2022',
+        'NAME': 'viya22',
         'USER': 'root',
         'PASSWORD': 'ermira',
         'HOST':'localhost',

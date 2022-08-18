@@ -23,6 +23,22 @@ td, th {
     font-size: 15px;
 }
 
+td, th {
+    text-align: center;
+    vertical-align: middle ;
+    font-size: 15px;
+}
+
+table thead th .text a {
+    text-align: center;
+    vertical-align: middle ;
+}
+
+.inline-group thead th {
+    text-align: center;
+    vertical-align: middle ;
+}
+
 tr:hover{
     background-color: lightblue;
 }

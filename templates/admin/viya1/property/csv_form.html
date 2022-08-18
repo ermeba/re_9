@@ -12,9 +12,6 @@
 {#                {{ form.as_p }}#}
 
 
-
-
-
     <form action="get_link" method="post">
         {% csrf_token %}
     <label for="your_link">Copy your link: </label>
@@ -34,7 +31,8 @@
         }
     </script>
 
-    </div>
+
     <br />
+    </div>
   {{ block.super }}
 {% endblock %}

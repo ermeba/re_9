@@ -2,7 +2,7 @@
 
 from django.shortcuts import render
 
-from viya1.models import Property
+from viya1.models import Property, ClientDocuments, Client, FamilyMember
 
 
 def about(request):
@@ -60,3 +60,32 @@ class ContactRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class=ContactSerializer
     queryset=Contact.objects.all()
     lookup_field='id'
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from viya1.functions import handle_uploaded_file
+from viya1.forms import ClientDocumentsForm
+
+
+def index(request, slug):
+    slug_1 = Client.objects.get(slug1=slug)
+    members = FamilyMember.objects.get(client_key= slug_1.id)
+    print(members)
+
+    if request.method == 'POST':
+        student = ClientDocuments(request.POST, request.FILES)
+        if student.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            model_instance = student.save(commit=False)
+            model_instance.save()
+            return HttpResponse("File uploaded successfuly")
+
+    else:
+        context = {
+            'members': members,
+            # 'posts': posts,
+        }
+        print(context)
+        student = ClientDocuments()
+        return render(request, 'admin/viya1/client/profil.html', context)
