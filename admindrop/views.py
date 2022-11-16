@@ -34,7 +34,7 @@ class DistrictList(APIView):
 class SubDistrictList(APIView):
     permission_classes=[IsAuthenticated,]
 
-    def post(self, request,format=None):
+    def post(self, request, format=None):
         district=request.data['district']
         subdistrict={}
         if district:

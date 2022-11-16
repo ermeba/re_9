@@ -21,17 +21,18 @@ class DistrictListAPIView(APIView):
         division = request.data['division']
         district = {}
         if division:
-            districts = City.objects.get(id=division).districts.all()
+            districts = Division.objects.get(id=division).districts.all()
             district = {pp.name:pp.id for pp in districts}
         return JsonResponse(data=district, safe=False)
 
 
 class SubDistrictListAPIView(APIView):
     permission_classes=[IsAuthenticated,]
-    def post(self,request,format=None):
-        division = request.data['district']
-        district = {}
-        if division:
-            districts = District.objects.get(id=division).subdistricts.all()
-            district = {pp.name:pp.id for pp in districts}
-        return JsonResponse(data=district, safe=False)
+
+    def post(self, request,format=None):
+        district=request.data['district']
+        subdistrict={}
+        if district:
+            subdistricts=District.objects.get(id=district).subdistricts.all()
+            subdistrict={pp.name:pp.id for pp in subdistricts}
+        return JsonResponse(data=subdistrict, safe=False)

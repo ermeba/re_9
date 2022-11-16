@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-i$wzlk-3m_+3+)0gtjavpxjj93#x&a1zo4!7ux+@s29-9xv)6@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.226', '127.0.0.1', 'localhost', 'viya']  # '192.168.1.226',
 
 # export DJANGO_SETTINGS_MODULE=viya1.settings
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'viya.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'viya22',
+        'NAME': 'viya_23',
         'USER': 'root',
         'PASSWORD': 'ermira',
         'HOST':'localhost',

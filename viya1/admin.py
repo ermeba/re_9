@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import path, include, reverse
 from django.utils.html import format_html
 from django.http import HttpResponse
-from django_admin_listfilter_dropdown.filters import (DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter,
+from django_admin_listfilter_dropdown.filters import (DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter,\
                                                       RelatedOnlyDropdownFilter)
 from admin_numeric_filter.admin import NumericFilterModelAdmin, SingleNumericFilter, RangeNumericFilter, \
     SliderNumericFilter
@@ -15,17 +15,19 @@ from rest_framework.generics import get_object_or_404
 
 from viya1.functions import handle_uploaded_file
 from viya1.models import City, Division, District, SubDistrict, Address, Type, Status, Property, Sours, PropertySingle, \
-    Partner, Project, Client, ClientContact, FamilyMember, References, FamilyDocuments, ClientDocuments
+    Partner, Project, Client, ClientContact, FamilyMember, References, FamilyDocuments, ClientDocuments, Offers, \
+    OfferPhotos, OfferDescription, OfferPrice, OfferSqm, OfferProject, OfferCompany, OfferType,  \
+    OfferRoomTypeExpression
 from django.shortcuts import render
-
 #Property, Type, Status, PropertySingle
 
+
 import re
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from bs4 import BeautifulSoup
-from time import sleep
-from random import randint
+# from selenium import webdriver
+# from selenium.webdriver.chrome.service import Service
+# from bs4 import BeautifulSoup
+# from time import sleep
+# from random import randint
 
 
 # Adding Property, Status and Type tables to Admin
@@ -85,7 +87,7 @@ class ScrapData(forms.Form):
 
 
 class NameForm(forms.Form):
-    get_link = forms.CharField(label='Your name', max_length=100)
+    get_link1 = forms.CharField(label='Your name', max_length=100)
 
 
 @admin.register(Property)
@@ -101,9 +103,10 @@ class PropertyAdmin(admin.ModelAdmin):
                      'nr_of_rooms',
                      'brut_case_net',
                      'city_case_division',
-                     # 'link',
+                     'link',
                      'pdf1',
                      'edit',
+                     # 'active',
                      'status']
     search_fields = ['offer', 'advert_no']
     list_editable = []
@@ -140,6 +143,12 @@ class PropertyAdmin(admin.ModelAdmin):
         return format_html('<input type="button" onclick="window.open(`/admin/viya1/property/{}/change/`,`_blank`)"'
                            'value="edit" />'
                            , obj.id)
+
+    # def active(self, obj):
+    #     prop = Property.objects.all()
+    #     return format_html('<input type="button" onclick="window.open(`/admin/viya1/property/{}/change/`,`_blank`)"'
+    #                        'value="Check the status" />'
+    #                        , obj.id)
 
     # def delete_button(self, obj):
     #     return format_html('<input type="button" onclick="location.href="/admin/viya1/my_model/{}/change/" '
@@ -187,7 +196,7 @@ class PropertyAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         my_urls = [
             path('scrap_data/', self.scrap_data),
-            path('scrap_data/get_link/', self.get_link),
+            path('scrap_data/get_link1/', self.get_link1),
         ]
 
         return my_urls + urls
@@ -207,6 +216,14 @@ class PropertyAdmin(admin.ModelAdmin):
             request,   "admin/viya1/property/csv_form.html", data
          )
 
+    def get_link1(self, request):
+
+        import requests
+        URL = "https://www.sahibinden.com/ilan/vasita-minivan-panelvan-mercedes-benz-by.beyogluauto-2022-ful-tam-faturali-18-sifir-8-plus1-otomobil-1040999251/detay/"
+        r = requests.get(URL)
+        # print(r.content)
+        return HttpResponse(r.content)
+
     def get_link(self, request):
         # if this is a POST request we need to process the form data
         if request.method == 'POST':
@@ -225,27 +242,18 @@ class PropertyAdmin(admin.ModelAdmin):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_experimental_option("useAutomationExtension", False)
         chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-
         # chromedriver_path = "C:\\Users\\Lenovo\\PycharmProjects\\viya\\chromedriver.exe"
         # service = Service(chromedriver_path)
         # driver = webdriver.Chrome(service=service)
-
         driver = webdriver.Chrome(options=chrome_options)
-
-
-
-        url = "https://www.hepsiemlak.com/istanbul-kadikoy-suadiye-kiralik/daire/62823-5161"
+        url = "https://www.hepsiemlak.com/ankara-kecioren-ovacik-satilik/daire/5116-448"
         # url ='https://www.sahibinden.com/ilan/emlak-konut-satilik-agaoglu-my-towerland-atasehir-de-full-deniz-manzarali-3-plus1-1036362789/detay'
         driver.get(url)
         sleep(randint(3, 5))
-
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         driver.quit()
-
         links = soup.find_all("a")
         top10 = set()
-
-
         # soup = soup.find("body").find("ul")
 
         #    data = soup.find('div', class_="txt")
@@ -256,7 +264,6 @@ class PropertyAdmin(admin.ModelAdmin):
         #     print(link.text)
 
         import webbrowser
-
         print("Please enter the link")
         link = input()
         webbrowser.open(link)
@@ -470,3 +477,99 @@ admin.site.register(Client, ClientAdmin)
 # # posts = Client.objects.get(pk=pk)
 #
 # print (clientdata)
+
+
+class OfferPhotosInline(admin.TabularInline):
+    model = OfferPhotos
+    extra = 1
+
+
+class OfferDescriptionInline(admin.TabularInline):
+    model = OfferDescription
+    max_num = 1
+
+
+class OfferPriceInline(admin.TabularInline):
+    model = OfferPrice
+    max_num = 1
+
+
+class OfferSqmInline(admin.TabularInline):
+    model = OfferSqm
+    max_num = 1
+
+# class OfferRoomTypeAdmin(admin.TabularInline):
+#     model = OfferRoomType
+#     max_num = 1
+
+
+# @admin.register(Partner)
+class OffersAdmin(admin.ModelAdmin):
+    inlines = [ OfferPhotosInline, OfferDescriptionInline, OfferPriceInline, OfferSqmInline]
+    list_display = ['image_preview','offer_type', 'offer_name','city','division', 'district', 'project','company'] # 'profile_foo', 'room_type'
+    # list_display = ['offer_name',  'offer_type',  'city', 'division', 'district', 'subdistrict',
+    #                 'price', 'sqm', 'sqm','room_type', 'contact', 'description', 'features', 'address' ]
+    # search_fields = ['advert_no', 'city', 'division' ]
+    # list_filter = ['nr_of_rooms', 'nr_of_bathrooms', 'city', 'division' ]
+    # list_editable = ['offer_name']
+    # raw_id_fields = ['offer_type','project','company' ]
+    list_display_links = ('image_preview', 'offer_type')
+    list_per_page = 25
+    #def show_firm_url(self, obj):
+    #return format_html("<a href='{url}'>{url}</a>", url=obj.website)
+    class Media:
+        js = ("viya1/selectajax.js",)
+
+    # @admin.display(description='Status of project', ordering='status_of_project')
+    # def get_status_of_project(self, obj):
+    #     return obj.project.status_of_project
+
+
+
+admin.site.register(Offers, OffersAdmin)
+
+
+class OfferProjectAdmin(admin.ModelAdmin):
+    inlines = []
+    list_display = ['image_preview', 'name_of_project', 'status_of_project', 'year_of_completion', 'type_of_project',
+                    'description', 'address',  'website']
+    # list_display = ['offer_name',  'offer_type',  'city', 'division', 'district',
+    #                 'price', 'sqm', 'sqm','room_type', 'contact', 'description', 'features', 'address' ]
+    # search_fields = ['advert_no', 'city', 'division' ]
+    # list_filter = ['nr_of_rooms', 'nr_of_bathrooms', 'city', 'division' ]
+    # list_editable = ['offer_name']
+    list_per_page = 25
+    #def show_firm_url(self, obj):
+    #return format_html("<a href='{url}'>{url}</a>", url=obj.website)
+    class Media:
+        js = ("viya1/selectajax.js",)
+
+admin.site.register(OfferProject, OfferProjectAdmin)
+
+
+class OfferCompanyAdmin(admin.ModelAdmin):
+    inlines = []
+    list_display = ['status_of_partner', 'name_of_company','year_of_establishment', 'address',
+                    'number_of_project', 'description',  'logo', 'website']
+    # list_display = ['offer_name',  'offer_type',  'city', 'division', 'district',
+    #                 'price', 'sqm', 'sqm','room_type', 'contact', 'description', 'features', 'address' ]
+    # search_fields = ['advert_no', 'city', 'division' ]
+    # list_filter = ['nr_of_rooms', 'nr_of_bathrooms', 'city', 'division' ]
+    # list_editable = ['offer_name']
+    list_per_page = 25
+    #def show_firm_url(self, obj):
+    #return format_html("<a href='{url}'>{url}</a>", url=obj.website)
+admin.site.register(OfferCompany, OfferCompanyAdmin)
+
+class OfferTypeAdmin(admin.ModelAdmin):
+    inlines = []
+    list_display = ['type_name']
+#    list_per_page = 25
+    #def show_firm_url(self, obj):
+    #return format_html("<a href='{url}'>{url}</a>", url=obj.website)
+admin.site.register(OfferType, OfferTypeAdmin)
+
+# class OfferRoomTypeAdmin(admin.TabularInline):
+#     model = OfferRoomTypeAdmin
+#     max_num = 1
+

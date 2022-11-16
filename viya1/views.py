@@ -13,7 +13,7 @@ def about(request):
         'property': property,
     }
     print(context)
-    return render(request, 'index.html', context)
+    return render(request, 'admin/', context)
 
 
 
@@ -45,7 +45,9 @@ def indexview(request):
         "district_list":district_list,
         "subdistrict_list":subdistrict_list,
     }
-    return render(request, 'index.html', context)
+    # return render(request, 'index.html', context)
+    return render(request, 'admin/', context)
+
 
 
 
@@ -74,12 +76,19 @@ def index(request, slug):
     print(members)
 
     if request.method == 'POST':
+
+        context = {
+            'members': members,
+            # 'posts': posts,
+        }
+        print(context)
         student = ClientDocuments(request.POST, request.FILES)
         if student.is_valid():
             handle_uploaded_file(request.FILES['file'])
             model_instance = student.save(commit=False)
             model_instance.save()
-            return HttpResponse("File uploaded successfuly")
+            return render(request, 'admin/', context)
+            # return HttpResponse("File uploaded successfuly")  /admin
 
     else:
         context = {

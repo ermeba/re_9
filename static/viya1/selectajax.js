@@ -70,7 +70,7 @@ jQuery(function($){
                     console.log(result);
                     cols = document.getElementById("id_subdistrict");
                     cols.options.length = 0;
-                    cols.options.add(new Option("Subdistrict", "Subdistrict"));
+                    cols.options.add(new Option("SubDistrict", "SubDistrict"));
 
                     for(var k in result){
                         cols.options.add(new Option(k, result[k]));
